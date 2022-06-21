@@ -1,96 +1,31 @@
 import web3 from './web3';
 
-const address = '0x5A9D2ee589c23FaC6b510bA3EaeaBBBE1d9563f0';
+const address = '0x94FF3E2013603BBe2Bb4d082bE7F695f5B0B2837';
 
-const abi = [ { inputs: [],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-    constant: undefined,
-    payable: undefined,
-    signature: 'constructor' },
-  { inputs: [ [Object] ],
-    name: 'addStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-    constant: undefined,
-    payable: undefined,
-    signature: '0x30f23c8b' },
-  { inputs: [ [Object], [Object] ],
-    name: 'changeTaskAuthor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-    constant: undefined,
-    payable: undefined,
-    signature: '0xa23d1789' },
-  { inputs: [ [Object], [Object] ],
-    name: 'changeTaskName',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-    constant: undefined,
-    payable: undefined,
-    signature: '0xdba77555' },
-  { inputs: [ [Object], [Object] ],
-    name: 'changeTaskStatus',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-    constant: undefined,
-    payable: undefined,
-    signature: '0x69616ece' },
-  { inputs: [ [Object], [Object], [Object] ],
-    name: 'createTask',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-    constant: undefined,
-    payable: undefined,
-    signature: '0x41a4e30a' },
-  { inputs: [],
-    name: 'getAllTasks',
-    outputs: [ [Object] ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-    payable: undefined,
-    signature: '0x779900b4' },
-  { inputs: [],
-    name: 'getStatus',
-    outputs: [ [Object] ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-    payable: undefined,
-    signature: '0x4e69d560' },
-  { inputs: [ [Object] ],
-    name: 'getTask',
-    outputs: [ [Object] ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-    payable: undefined,
-    signature: '0x1d65e77e' },
-  { inputs: [ [Object] ],
-    name: 'status',
-    outputs: [ [Object] ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-    payable: undefined,
-    signature: '0x42d21ef7' },
-  { inputs: [ [Object] ],
-    name: 'tasks',
-    outputs:
-     [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-    payable: undefined,
-    signature: '0x8d977672' } ]
+const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"string","name":"value","type":"string"}],"name":"addStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"task_id","type":"uint256"},{"internalType":"string","name":"author","type":"string"}],"name":"changeTaskAuthor","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"task_id","type":"uint256"},{"internalType":"string","name":"name","type":"string"}],"name":"changeTaskName","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"task_id","type":"uint256"},{"internalType":"uint256","name":"status_id","type":"uint256"}],"name":"changeTaskStatus","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"id","type":"uint256"}],"name":"createTask","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllTasks","outputs":[{"components":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"status","type":"uint256"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bool","name":"added","type":"bool"},{"internalType":"bool","name":"created","type":"bool"}],"internalType":"struct Todo.Task[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getStatus","outputs":[{"internalType":"string[]","name":"","type":"string[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"task_id","type":"uint256"}],"name":"getTask","outputs":[{"components":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"status","type":"uint256"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bool","name":"added","type":"bool"},{"internalType":"bool","name":"created","type":"bool"}],"internalType":"struct Todo.Task","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"status_id","type":"uint256"}],"name":"getTasksAtState","outputs":[{"components":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"status","type":"uint256"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bool","name":"added","type":"bool"},{"internalType":"bool","name":"created","type":"bool"}],"internalType":"struct Todo.Task[]","name":"","type":"tuple[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"state_tasks","outputs":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"status","type":"uint256"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bool","name":"added","type":"bool"},{"internalType":"bool","name":"created","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"status","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"","type":"string"}],"name":"status_exist","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"tasks","outputs":[{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"author","type":"string"},{"internalType":"uint256","name":"status","type":"uint256"},{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"bool","name":"added","type":"bool"},{"internalType":"bool","name":"created","type":"bool"}],"stateMutability":"view","type":"function"}];
 
 
   export default new web3.eth.Contract(abi, address);
+
+// import ganache from 'ganache-cli';
+// import Web3 from 'web3';
+// import { abi, evm} from './compile.js';
+// const web3 = new Web3(ganache.provider());
+
+
+
+// let todo;
+
+// let accounts = await web3.eth.getAccounts();
+//   // console.log("accounts: "+accounts);
+//   // balance = await web3.eth.getBalance(accounts[3]);
+//   // console.log("Balance: " + balance);
+// todo = await new web3.eth.Contract(JSON.parse(abi))
+//     .deploy({
+//       data: evm,
+//     }).send({ from: accounts[0], gas: '3000000' });
+
+// export default todo;
+
 
     

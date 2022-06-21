@@ -3,7 +3,7 @@ import TaskItem from './TaskItem';
 
 function TaskList() {
     return (
-        <div className="d-flex justify-content-center">
+        <div className="d-flex flex-column task-list">
             <TaskItem/>
         </div>
     )

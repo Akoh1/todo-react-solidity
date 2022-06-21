@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import TaskList from './TaskList';
-import { Modal, Button } from "react-bootstrap";
-import TaskModal from './TaskModal';
+import web3 from "../web3"
+import todo from '../todo';
+// import { Modal, Button } from "react-bootstrap";
 
 function TaskTable() {
     const [statusText, setStatusText ]= useState('');
     // const [status, setStatus ] = useState({0: 'Draft'});
-    const [status, setStatus]= useState(['Draft']);
+    const [status, setStatus]= useState();
     
-    // useEffect(() => {
-    //     // Update the document title using the browser API
-    //     // document.title = `You clicked ${count} times`;
-    //     console.log(statusText);
-    // });
+    useEffect(async () => {
+        // Update the document title using the browser API
+        const todo_status = await todo.methods.status().call();
+        console.log("todo status: " + todo_status);
+        setStatus( arr => [...arr, todo_status]);
+        
+    });
 
     const createStatus = (event) => {
         event.preventDefault();
@@ -80,13 +83,11 @@ function TaskTable() {
             </form>
         </div>
         
-        <table className="table task-table">
+        <table className="table">
            
             <thead>
                 <tr>
-                    <th scope="col">
-                        {/* <button className="btn" data-toggle="modal" data-target="#exampleModal">
-                            <i className="bi bi-plus-circle"></i></button> */}
+                    <th>
                         <button className="btn" data-toggle="modal" data-target="#exampleModal">
                             <i className="bi bi-plus-circle"></i></button>
                     </th>

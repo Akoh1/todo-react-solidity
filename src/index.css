@@ -19,7 +19,11 @@ code {
 
 .task-item {
   width: 10rem;
-
+  margin: 0;
+}
+.task-list {
+  margin: auto;
+  width: auto;
 }
 
 .loop-td {
