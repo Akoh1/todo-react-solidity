@@ -7,26 +7,36 @@ import todo from '../todo';
 function TaskTable() {
     const [statusText, setStatusText ]= useState('');
     // const [status, setStatus ] = useState({0: 'Draft'});
-    const [status, setStatus]= useState();
+    const [status, setStatus]= useState([]);
     
-    useEffect(async () => {
+    useEffect(() => {
         // Update the document title using the browser API
-        const todo_status = await todo.methods.status().call();
-        console.log("todo status: " + todo_status);
-        setStatus( arr => [...arr, todo_status]);
-        
-    });
+        // const todo_status = await todo.methods.status().call();
+        // console.log("todo status: " + todo_status);
+        // setStatus( arr => [...arr, todo_status]);
+        async function fetchData() {
+            // You can await here
+            const todo_status = await todo.methods.getStatus().call();
+            console.log("todo status: " + todo_status);
+            setStatus( arr => [...arr, todo_status]);
+        }
+        fetchData();
+        console.log("React status: "+ status);
+    },[]);
 
-    const createStatus = (event) => {
+    const createStatus = async (event) => {
         event.preventDefault();
-
+        const accounts = await web3.eth.getAccounts();
+        await todo.methods.addStatus(statusText).send({
+            from: accounts[0]
+          });
         // let updatedValue = {};
         // updatedValue = {"item1":"juice"};
         // setShopCart(shopCart => ({
         //     ...shopCart,
         //     ...updatedValue
         //     }));
-        setStatus( arr => [...arr, statusText]);
+        // setStatus( arr => [...arr, statusText]);
     };
 
     const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +105,7 @@ function TaskTable() {
                     // Object.keys(status).map((key) => (
                     //     <th key={key}>{status[key]}</th>
                     // ))
-                    status.map((item, id) => (
+                    (status || []).map((item, id) => (
                         <th key={id}>{item}</th>
                     ))
                 }
@@ -104,7 +114,7 @@ function TaskTable() {
             <tbody>
                 <tr>
                     <td></td>
-                    {status.map((item, id) => (
+                    {(status || []).map((item, id) => (
                         <td className='loop-td' key={id}>
                             <TaskList/>
                         </td>
