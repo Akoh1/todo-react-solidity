@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function TaskItem() {
+function TaskItem(props) {
     return (
         <div className="p-2">
             {/* <div class="card" style="width: 7rem;">
@@ -18,8 +18,9 @@ function TaskItem() {
                     <span aria-hidden="true">&times;</span>
                 </button>
                 {/* <h4 className="alert-heading">Well done!</h4> */}
-                
-                <small>Aww yeah, you successfully read this important alert message. .</small>
+                <small>{props.title}</small>
+                <small>{props.author}</small>
+                {/* <small>Aww yeah, you successfully read this important alert message. .</small> */}
                 <hr/>
                 <button className="card-link btn-sm">Card link</button>
                 

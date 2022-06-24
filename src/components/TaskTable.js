@@ -8,28 +8,45 @@ function TaskTable() {
     const [statusText, setStatusText ]= useState('');
     // const [status, setStatus ] = useState({0: 'Draft'});
     const [status, setStatus]= useState([]);
+
+    const [taskTitle, setTaskTitle] = useState('');
+    const [taskAuthor, setTaskAuthor] = useState('');
+
+    // const [tasks, setTasks] = useState([]);
+
+    // const [task, setTask] = useState({});
+
     
     useEffect(() => {
         // Update the document title using the browser API
-        // const todo_status = await todo.methods.status().call();
-        // console.log("todo status: " + todo_status);
-        // setStatus( arr => [...arr, todo_status]);
-        async function fetchData() {
+        const fetchData = async () => {
             // You can await here
             const todo_status = await todo.methods.getStatus().call();
             console.log("todo status: " + todo_status);
-            setStatus( arr => [...arr, todo_status]);
+            setStatus([...todo_status]);
+            // setStatus( arr => [...arr, val]);
+           
+            
         }
         fetchData();
-        console.log("React status: "+ status);
+        // getStatus();
+        
     },[]);
 
     const createStatus = async (event) => {
         event.preventDefault();
         const accounts = await web3.eth.getAccounts();
-        await todo.methods.addStatus(statusText).send({
-            from: accounts[0]
-          });
+        const todo_status = await todo.methods.getStatus().call();
+        console.log("todo status in create: " + todo_status);
+        if (todo_status.includes(statusText) === false) {
+            await todo.methods.addStatus(statusText).send({
+                from: accounts[0]
+              });
+            //   setStatus( arr => [...arr, statusText]);
+            window.location.reload(true);
+        }
+        console.log('REACT STatus: '+ status);
+        // window.location.reload(false);
         // let updatedValue = {};
         // updatedValue = {"item1":"juice"};
         // setShopCart(shopCart => ({
@@ -39,27 +56,76 @@ function TaskTable() {
         // setStatus( arr => [...arr, statusText]);
     };
 
-    const [isOpen, setIsOpen] = useState(false);
-
-    const showModal = () => {
-        console.log("Show modal click is working");
-        setIsOpen(true);
+    const deleteStatus = async (event) => {
+        event.preventDefault();
+        let selectElem = document.querySelector('#status_selection');
+        let output = parseInt(selectElem.value);
+        console.log("Target delete: " + output);
+        const accounts = await web3.eth.getAccounts();
+        await todo.methods.removeStatus(output).send({
+            from: accounts[0]
+        });
+        window.location.reload(true);
     };
 
-    const hideModal = () => {
-        setIsOpen(false);
+    const createTask = async (event) => {
+        event.preventDefault();
+        console.log("task title: " + taskTitle);
+        let task_len = await todo.methods.getAllTasksLength().call();
+        console.log("Current Task Length: " + task_len);
+        // let selectElem = document.querySelector('#status_selection');
+        // let output = parseInt(selectElem.value);
+        // console.log("Target delete: " + output);
+        // const accounts = await web3.eth.getAccounts();
+        // await todo.methods.removeStatus(output).send({
+        //     from: accounts[0]
+        // });
+        // window.location.reload(true);
     };
+
 
     
     return (
         <>
        
       <div className="task-table">
+
+       
         
       <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog">
             <div className="modal-content">
-            <div className="modal-header">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Create a Task</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div className="modal-body">
+                    <form onSubmit={createTask}>
+                            <div className="form-group">
+                                <label htmlFor="task-title">Title</label>
+                                <input type="text" 
+                                    value={taskTitle}
+                                    onChange={e => setTaskTitle(e.target.value)}
+                                    className="form-control" 
+                                    id="task-title" 
+                                    placeholder="Task Title"/>
+
+                                <label htmlFor="task-author">Author</label>
+                                <input type="text" 
+                                    value={taskAuthor}
+                                    onChange={e => setTaskAuthor(e.target.value)}
+                                    className="form-control" 
+                                    id="task-author" 
+                                    placeholder="Task Title"/>
+                                
+                            </div>
+                            <button type="submit" className="btn btn-primary">Create</button>
+                    </form>
+                </div>
+                
+            {/* <div className="modal-header">
                 <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -71,27 +137,50 @@ function TaskTable() {
             <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-primary">Save changes</button>
-            </div>
+            </div> */}
             </div>
         </div>
         </div>
     
-        
-        <div className="form-task">
-            <form onSubmit={createStatus}>
-                <div className="form-group">
-                    <label htmlFor="status-input-name">New Status</label>
-                    <input type="text" 
-                        value={statusText}
-                        onChange={e => setStatusText(e.target.value)}
-                        className="form-control" 
-                        id="status-input-name" 
-                        placeholder="Create a New Status"/>
-                    
-                </div>
-                <button type="submit" className="btn btn-primary">Create</button>
-            </form>
+        <div className="d-flex justify-content-center form-task">
+            
+            <div className="p-2">
+                <form onSubmit={createStatus}>
+                    <div className="form-group">
+                        <label htmlFor="status-input-name">New Status</label>
+                        <input type="text" 
+                            value={statusText}
+                            onChange={e => setStatusText(e.target.value)}
+                            className="form-control" 
+                            id="status-input-name" 
+                            placeholder="Create a New Status"/>
+                        
+                    </div>
+                    <button type="submit" className="btn btn-primary">Create</button>
+                </form>
+            </div>
+
+            <div className="p-2">
+                <form onSubmit={deleteStatus}>
+                    <div className="form-group">
+                        <label htmlFor="status_selection">Select Status</label>
+                        <select className="form-control" id="status_selection">
+                        {(status || []).map((item, id) => (
+                            <option value={id} key={id}>{item}</option>
+                            
+                        ))}
+                        {/* <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option> */}
+                        </select>
+                    </div>
+                    <button type="submit" className="btn btn-primary">Delete Status</button>
+                </form>
+            </div>
         </div>
+     
         
         <table className="table">
            
@@ -116,7 +205,7 @@ function TaskTable() {
                     <td></td>
                     {(status || []).map((item, id) => (
                         <td className='loop-td' key={id}>
-                            <TaskList/>
+                            <TaskList key={item} status_id={id}/>
                         </td>
                     ))}
                 </tr>
