@@ -35,41 +35,19 @@ function TaskTable() {
             setStatus([...todo_status]);
             // setStatus( arr => [...arr, val]);
 
-            // const todo_tasks = await todo.methods.getAllTasks().call();
-            // console.log("Table todo tasks: " + todo_tasks);
-            // setTasks([...todo_tasks]);
-            // task_array.push(...todo_tasks)
-            // todo_tasks.forEach(elem => {
-            //     console.log("loop table comp tasks: " + elem);
-            //     const myTask = {
-            //         title: elem.title,
-            //         author: elem.author,
-            //         status: elem.status
-            //     };
-            //     task_array.push(myTask);
-            // //     setTasks(arr => [...arr, myTask]);
-                
-            // });
-            // setStatus([...task_array]);
-            // console.log("React table comp task: " + tasks);
-            // console.log("React table comp task push: " + task_array);
+            const todo_tasks = await todo.methods.getAllTasks().call();
+            console.log("Table todo tasks: " + todo_tasks);
+            setTasks([...todo_tasks]);
+            
             
         }
         fetchData();
         // getStatus();
-        // console.log("React table comp task: " + tasks);
+        console.log("Table set todo tasks: " + tasks);
         // console.log("React table comp task push: " + task_array);
         
     },[]);
 
-    const getTasksAtState = async (status_id) => {
-        // const todo_tasks = await todo.methods.getAllTasks().call();
-        const todo_tasks = await todo.methods.getTasksAtState(status_id).call();
-        console.log("Table todo tasks: " + todo_tasks);
-        setTasks([...todo_tasks]);
-        task_array.push(...todo_tasks)
-        return task_array;
-    }
 
     const createStatus = async (event) => {
         event.preventDefault();
@@ -268,7 +246,7 @@ function TaskTable() {
                     <td></td>
                     {(status || []).map((item, id) => (
                         <td className='loop-td' key={id}>
-                            <TaskList key={item} status_id={id}/>
+                            <TaskList key={item} status_id={id} tasks={tasks}/>
                         </td>
                     ))}
                 </tr>
