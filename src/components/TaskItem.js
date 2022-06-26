@@ -1,6 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
-function TaskItem(props) {
+function TaskItem() {
+    // const [task, setTask]= useState(props.task);
+
+    // useEffect(() => {
+    //     // Update the document title using the browser API
+    //     const fetchTask = async () => {
+    //         // You can await here
+    //         const todo_task = await todo.methods.getTask().call();
+    //         console.log("todo task: " + todo_task);
+    //         props.task.map(elem => {
+                
+    //         });
+    //         // setTasks([...todo_task]);
+    //         console.log("React Task: " + tasks);
+    //         // setStatus( arr => [...arr, val]);
+           
+            
+    //     }
+    //     fetchTask();
+    //     // getStatus();
+        
+    // },[props.status_id]);
     return (
         <div className="p-2">
             {/* <div class="card" style="width: 7rem;">
@@ -18,9 +39,9 @@ function TaskItem(props) {
                     <span aria-hidden="true">&times;</span>
                 </button>
                 {/* <h4 className="alert-heading">Well done!</h4> */}
-                <small>{props.title}</small>
-                <small>{props.author}</small>
-                {/* <small>Aww yeah, you successfully read this important alert message. .</small> */}
+                {/* <small>{task.title}</small>
+                <small>{task.author}</small> */}
+                <small>Aww yeah, you successfully read this important alert message. .</small>
                 <hr/>
                 <button className="card-link btn-sm">Card link</button>
                 

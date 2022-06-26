@@ -12,6 +12,15 @@ function TaskTable() {
     const [taskTitle, setTaskTitle] = useState('');
     const [taskAuthor, setTaskAuthor] = useState('');
 
+    const [tasks, setTasks] = useState([]);
+
+    let task_array = [];
+
+    const Task = [
+        {title: "Task1", author: 'Akoh', statuss: 0},
+        {title: "Task2", author: 'Akoh', statuss: 1}
+    ]
+
     // const [tasks, setTasks] = useState([]);
 
     // const [task, setTask] = useState({});
@@ -25,13 +34,42 @@ function TaskTable() {
             console.log("todo status: " + todo_status);
             setStatus([...todo_status]);
             // setStatus( arr => [...arr, val]);
-           
+
+            // const todo_tasks = await todo.methods.getAllTasks().call();
+            // console.log("Table todo tasks: " + todo_tasks);
+            // setTasks([...todo_tasks]);
+            // task_array.push(...todo_tasks)
+            // todo_tasks.forEach(elem => {
+            //     console.log("loop table comp tasks: " + elem);
+            //     const myTask = {
+            //         title: elem.title,
+            //         author: elem.author,
+            //         status: elem.status
+            //     };
+            //     task_array.push(myTask);
+            // //     setTasks(arr => [...arr, myTask]);
+                
+            // });
+            // setStatus([...task_array]);
+            // console.log("React table comp task: " + tasks);
+            // console.log("React table comp task push: " + task_array);
             
         }
         fetchData();
         // getStatus();
+        // console.log("React table comp task: " + tasks);
+        // console.log("React table comp task push: " + task_array);
         
     },[]);
+
+    const getTasksAtState = async (status_id) => {
+        // const todo_tasks = await todo.methods.getAllTasks().call();
+        const todo_tasks = await todo.methods.getTasksAtState(status_id).call();
+        console.log("Table todo tasks: " + todo_tasks);
+        setTasks([...todo_tasks]);
+        task_array.push(...todo_tasks)
+        return task_array;
+    }
 
     const createStatus = async (event) => {
         event.preventDefault();
@@ -71,8 +109,11 @@ function TaskTable() {
     const createTask = async (event) => {
         event.preventDefault();
         console.log("task title: " + taskTitle);
-        let task_len = await todo.methods.getAllTasksLength().call();
-        console.log("Current Task Length: " + task_len);
+        console.log("task Author: " + taskAuthor);
+        const accounts = await web3.eth.getAccounts();
+        await todo.methods.createTask(taskTitle, taskAuthor).send({from: accounts[0]});
+        window.location.reload(true);
+        
         // let selectElem = document.querySelector('#status_selection');
         // let output = parseInt(selectElem.value);
         // console.log("Target delete: " + output);
@@ -90,13 +131,29 @@ function TaskTable() {
        
       <div className="task-table">
 
+        <div className="modal fade" id="noStatus" tabIndex="-1" aria-labelledby="noStatusLabel" aria-hidden="true">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                    
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <p>Please create a status to be able to create a Task</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
        
         
-      <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div className="modal fade" id="statusExist" tabIndex="-1" aria-labelledby="statusExistLabel" aria-hidden="true">
         <div className="modal-dialog">
             <div className="modal-content">
                 <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">Create a Task</h5>
+                    <h5 className="modal-title" id="statusExistLabel">Create a Task</h5>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -187,8 +244,14 @@ function TaskTable() {
             <thead>
                 <tr>
                     <th>
-                        <button className="btn" data-toggle="modal" data-target="#exampleModal">
+                        {
+                            status.length > 0 ?
+                            <button className="btn" data-toggle="modal" data-target="#statusExist">
                             <i className="bi bi-plus-circle"></i></button>
+                            : <button className="btn" data-toggle="modal" data-target="#noStatus">
+                            <i className="bi bi-plus-circle"></i></button>
+                        }
+                        
                     </th>
                 {
                     // Object.keys(status).map((key) => (
