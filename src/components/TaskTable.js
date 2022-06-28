@@ -14,16 +14,7 @@ function TaskTable() {
 
     const [tasks, setTasks] = useState([]);
 
-    let task_array = [];
-
-    const Task = [
-        {title: "Task1", author: 'Akoh', statuss: 0},
-        {title: "Task2", author: 'Akoh', statuss: 1}
-    ]
-
-    // const [tasks, setTasks] = useState([]);
-
-    // const [task, setTask] = useState({});
+    const [draggedTask, setDraggedTask] = useState();
 
     
     useEffect(() => {
@@ -36,24 +27,27 @@ function TaskTable() {
             // setStatus( arr => [...arr, val]);
 
             const todo_tasks = await todo.methods.getAllTasks().call();
-            console.log("Table todo tasks: " + todo_tasks);
-            setTasks([...todo_tasks]);
-            
+            setTasks([...todo_tasks]); 
+
+            // console.log("DraggedTask: " + draggedTask);
             
         }
         fetchData();
         // getStatus();
-        console.log("Table set todo tasks: " + tasks);
         // console.log("React table comp task push: " + task_array);
         
     },[]);
+
+    // const getDraggedTask = (arr) => {
+    //     console.log("array from drag: " + arr);
+    // };
 
 
     const createStatus = async (event) => {
         event.preventDefault();
         const accounts = await web3.eth.getAccounts();
         const todo_status = await todo.methods.getStatus().call();
-        console.log("todo status in create: " + todo_status);
+    
         if (todo_status.includes(statusText) === false) {
             await todo.methods.addStatus(statusText).send({
                 from: accounts[0]
@@ -61,7 +55,6 @@ function TaskTable() {
             //   setStatus( arr => [...arr, statusText]);
             window.location.reload(true);
         }
-        console.log('REACT STatus: '+ status);
         // window.location.reload(false);
         // let updatedValue = {};
         // updatedValue = {"item1":"juice"};
@@ -86,23 +79,26 @@ function TaskTable() {
 
     const createTask = async (event) => {
         event.preventDefault();
-        console.log("task title: " + taskTitle);
-        console.log("task Author: " + taskAuthor);
         const accounts = await web3.eth.getAccounts();
         await todo.methods.createTask(taskTitle, taskAuthor).send({from: accounts[0]});
         window.location.reload(true);
-        
-        // let selectElem = document.querySelector('#status_selection');
-        // let output = parseInt(selectElem.value);
-        // console.log("Target delete: " + output);
-        // const accounts = await web3.eth.getAccounts();
-        // await todo.methods.removeStatus(output).send({
-        //     from: accounts[0]
-        // });
-        // window.location.reload(true);
+    
     };
 
+    const onDropTask = async (event, status_id) => {
+        event.preventDefault();
+        const accounts = await web3.eth.getAccounts();
+        await todo.methods.changeTaskStatus(draggedTask, parseInt(status_id)).send({
+            from: accounts[0]
+        });
+        window.location.reload(true);
+    }
 
+    const onDropTaskOver = async (event) => {
+        event.preventDefault();
+       
+    }
+    // 
     
     return (
         <>
@@ -245,8 +241,16 @@ function TaskTable() {
                 <tr>
                     <td></td>
                     {(status || []).map((item, id) => (
-                        <td className='loop-td' key={id}>
-                            <TaskList key={item} status_id={id} tasks={tasks}/>
+                        <td className='loop-td' key={id} 
+                        onDrop={(event) => onDropTask(event, id)} 
+                        onDragOver={(event) => onDropTaskOver(event)}>
+                            <TaskList 
+                            key={item}
+                            status_id={id} 
+                            tasks={tasks}
+                            setDraggedTask={setDraggedTask}
+                           
+                            />
                         </td>
                     ))}
                 </tr>

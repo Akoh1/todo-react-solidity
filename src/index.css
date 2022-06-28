@@ -18,12 +18,17 @@ code {
 }
 
 .task-item {
+  /* width: 10rem; */
+  margin: 0;
+}
+.task-item-cover {
   width: 10rem;
   margin: 0;
 }
 .task-list {
-  margin: auto;
-  width: auto;
+  margin: 0;
+  max-height: 200rem;
+  /* width: auto; */
 }
 
 .loop-td {
