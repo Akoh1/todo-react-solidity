@@ -9,8 +9,7 @@ function TaskList(props) {
     const [status_id, setStatusID] = useState(props.status_id)
     
     useEffect(() => {
-        // Update the document title using the browser API
-        
+        // Update the document title using the browser API 
         props.setDraggedTask(draggedTask);
         async function fetchData(){
        
@@ -22,8 +21,6 @@ function TaskList(props) {
                     }
                 }
             });
-           
-            console.log("DraggedTask: " + draggedTask);
         }
         fetchData();
 
@@ -35,7 +32,6 @@ function TaskList(props) {
 
     return (
         <div className="d-flex flex-column task-list">
-         
             {
                 tasks && tasks.map((item, id) => (
                     <TaskItem key={id} 
@@ -44,7 +40,6 @@ function TaskList(props) {
                     status_id={status_id}/>
                 ))
             }
-            
         </div>
     )
 }
